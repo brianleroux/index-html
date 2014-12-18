@@ -1,13 +1,13 @@
 {
   "name": "index-html",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "14kb asset preloader library",
   "main": "dist/compile.js",
   "scripts": {
     "clean": "rimraf dist/*",
     "js": "6to5 --modules commonInterop src/compile.js > dist/compile.js",
     "html": "node bin/index-html example > example/index.html",
-    "compile":"npm run clean && npm run js && npm run html",
+    "compile": "npm run clean && npm run js && npm run html",
     "serve": "npm run compile && http-server -p 6666 example/"
   },
   "repository": {
