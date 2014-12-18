@@ -1,0 +1,448 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset=utf-8>
+  <meta name=viewport content=width=device-width,maximum-scale=1>
+  <title>test run title</title>
+  <style>#index-html {
+  background:#000;
+  color:#fff;
+  margin:0;
+  padding:0;
+  border:none;
+  width:100%;
+  height:100%;
+  z-index:9999;
+  position:absolute;
+  top:0;
+  left:0;
+}
+/*
+
+#index-html {
+  -webkit-transition: all .6s ease-in-out;
+  -moz-transition: all .6s ease-in-out;
+  -o-transition: all .6s ease-in-out;
+  -ms-transition: all .6s ease-in-out;
+  transition: all .6s ease-in-out;
+  width:50%; 
+  height:50%;
+}
+*/
+.index-html-load-complete {
+  opacity:0;
+  width:250%; 
+  height:250%;
+}
+</style>
+</head>
+<body>
+  <svg id=index-html class="icon-loading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100%" height="100%" fill="white">
+  <path transform="translate(-8 0)" d="M4 12 A4 4 0 0 0 4 20 A4 4 0 0 0 4 12"> 
+
+    <animateTransform attributeName="transform" type="translate" values="-8 0; 2 0; 2 0;" dur="0.8s" repeatCount="indefinite" begin="0s" keytimes="0;.25;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline"  />
+</path>
+<path transform="translate(2 0)" d="M4 12 A4 4 0 0 0 4 20 A4 4 0 0 0 4 12"> 
+<animateTransform attributeName="transform" type="translate" values="2 0; 12 0; 12 0;" dur="0.8s" repeatCount="indefinite" begin="0s" keytimes="0;.35;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline"  />
+</path>
+<path transform="translate(12 0)" d="M4 12 A4 4 0 0 0 4 20 A4 4 0 0 0 4 12"> 
+<animateTransform attributeName="transform" type="translate" values="12 0; 22 0; 22 0;" dur="0.8s" repeatCount="indefinite" begin="0s" keytimes="0;.45;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline"  />
+</path>
+<path transform="translate(24 0)" d="M4 12 A4 4 0 0 0 4 20 A4 4 0 0 0 4 12"> 
+<animateTransform attributeName="transform" type="translate" values="22 0; 32 0; 32 0;" dur="0.8s" repeatCount="indefinite" begin="0s" keytimes="0;.55;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline"  />
+</path>
+</svg>
+
+
+  <script>require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"preload":[function(require,module,exports){
+"use strict";
+
+module.exports = {
+  before: function () {
+    console.log("[index-html] before");
+  },
+
+  draw: function () {
+    console.log("[index-html] draw");
+  },
+
+  complete: function () {
+    console.log("[index-html] complete");
+  }
+};
+},{}]},{},[]);
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+// shim for using process in browser
+
+var process = module.exports = {};
+
+process.nextTick = (function () {
+    var canSetImmediate = typeof window !== 'undefined'
+    && window.setImmediate;
+    var canMutationObserver = typeof window !== 'undefined'
+    && window.MutationObserver;
+    var canPost = typeof window !== 'undefined'
+    && window.postMessage && window.addEventListener
+    ;
+
+    if (canSetImmediate) {
+        return function (f) { return window.setImmediate(f) };
+    }
+
+    var queue = [];
+
+    if (canMutationObserver) {
+        var hiddenDiv = document.createElement("div");
+        var observer = new MutationObserver(function () {
+            var queueList = queue.slice();
+            queue.length = 0;
+            queueList.forEach(function (fn) {
+                fn();
+            });
+        });
+
+        observer.observe(hiddenDiv, { attributes: true });
+
+        return function nextTick(fn) {
+            if (!queue.length) {
+                hiddenDiv.setAttribute('yes', 'no');
+            }
+            queue.push(fn);
+        };
+    }
+
+    if (canPost) {
+        window.addEventListener('message', function (ev) {
+            var source = ev.source;
+            if ((source === window || source === null) && ev.data === 'process-tick') {
+                ev.stopPropagation();
+                if (queue.length > 0) {
+                    var fn = queue.shift();
+                    fn();
+                }
+            }
+        }, true);
+
+        return function nextTick(fn) {
+            queue.push(fn);
+            window.postMessage('process-tick', '*');
+        };
+    }
+
+    return function nextTick(fn) {
+        setTimeout(fn, 0);
+    };
+})();
+
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+// TODO(shtylman)
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+
+},{}],2:[function(require,module,exports){
+/*!
+  * domready (c) Dustin Diaz 2014 - License MIT
+  */
+!function (name, definition) {
+
+  if (typeof module != 'undefined') module.exports = definition()
+  else if (typeof define == 'function' && typeof define.amd == 'object') define(definition)
+  else this[name] = definition()
+
+}('domready', function () {
+
+  var fns = [], listener
+    , doc = document
+    , hack = doc.documentElement.doScroll
+    , domContentLoaded = 'DOMContentLoaded'
+    , loaded = (hack ? /^loaded|^c/ : /^loaded|^i|^c/).test(doc.readyState)
+
+
+  if (!loaded)
+  doc.addEventListener(domContentLoaded, listener = function () {
+    doc.removeEventListener(domContentLoaded, listener)
+    loaded = 1
+    while (listener = fns.shift()) listener()
+  })
+
+  return function (fn) {
+    loaded ? fn() : fns.push(fn)
+  }
+
+});
+
+},{}],3:[function(require,module,exports){
+"use strict";
+
+/*!
+ * this is all @scottjehl, really i just export it and supply a callback
+ */
+function loadCSS(href, callback) {
+  var ss = window.document.createElement("link");
+  var ref = window.document.getElementsByTagName("script")[0];
+  var sheets = window.document.styleSheets;
+  ss.rel = "stylesheet";
+  ss.href = href;
+  // temporarily, set media to something non-matching to ensure it'll fetch without blocking render
+  ss.media = "only x";
+  // inject link
+  ref.parentNode.insertBefore(ss, ref);
+  // This function sets the link's media back to `all` so that the stylesheet applies once it loads
+  // It is designed to poll until document.styleSheets includes the new sheet.
+  function toggleMedia() {
+    var defined;
+    for (var i = 0; i < sheets.length; i++) {
+      if (sheets[i].href && sheets[i].href.indexOf(href) > -1) {
+        defined = true;
+      }
+    }
+    if (defined) {
+      ss.media = "all";
+      callback();
+    } else {
+      setTimeout(toggleMedia);
+    }
+  }
+  toggleMedia();
+  return ss;
+}
+
+module.exports = loadCSS;
+
+
+},{}],4:[function(require,module,exports){
+"use strict";
+
+/*!
+ * loadJS: load a JS file asynchronously
+ *
+ * [c]2014 @brianleroux
+ * based on work by @scottjehl, Filament Group, Inc.
+ * based on work by Paul Irish
+ * Licensed MIT
+ */
+function loadJS(src, cb) {
+  /*
+   * didn't see much difference here..
+  xhr(src, (err, res, body) => {
+    eval(body)
+    cb()
+  })
+    */
+  var ref = window.document.getElementsByTagName("script")[0], script = window.document.createElement("script");
+
+  script.src = src;
+  script.async = true;
+  script.defer = true;
+
+  ref.parentNode.insertBefore(script, ref);
+  script.onload = cb;
+  return script;
+}
+
+module.exports = loadJS;
+
+
+},{}],5:[function(require,module,exports){
+var now = require('performance-now')
+  , global = typeof window === 'undefined' ? {} : window
+  , vendors = ['moz', 'webkit']
+  , suffix = 'AnimationFrame'
+  , raf = global['request' + suffix]
+  , caf = global['cancel' + suffix] || global['cancelRequest' + suffix]
+  , isNative = true
+
+for(var i = 0; i < vendors.length && !raf; i++) {
+  raf = global[vendors[i] + 'Request' + suffix]
+  caf = global[vendors[i] + 'Cancel' + suffix]
+      || global[vendors[i] + 'CancelRequest' + suffix]
+}
+
+// Some versions of FF have rAF but not cAF
+if(!raf || !caf) {
+  isNative = false
+
+  var last = 0
+    , id = 0
+    , queue = []
+    , frameDuration = 1000 / 60
+
+  raf = function(callback) {
+    if(queue.length === 0) {
+      var _now = now()
+        , next = Math.max(0, frameDuration - (_now - last))
+      last = next + _now
+      setTimeout(function() {
+        var cp = queue.slice(0)
+        // Clear queue here to prevent
+        // callbacks from appending listeners
+        // to the current frame's queue
+        queue.length = 0
+        for(var i = 0; i < cp.length; i++) {
+          if(!cp[i].cancelled) {
+            try{
+              cp[i].callback(last)
+            } catch(e) {
+              setTimeout(function() { throw e }, 0)
+            }
+          }
+        }
+      }, Math.round(next))
+    }
+    queue.push({
+      handle: ++id,
+      callback: callback,
+      cancelled: false
+    })
+    return id
+  }
+
+  caf = function(handle) {
+    for(var i = 0; i < queue.length; i++) {
+      if(queue[i].handle === handle) {
+        queue[i].cancelled = true
+      }
+    }
+  }
+}
+
+module.exports = function(fn) {
+  // Wrap in a new function to prevent
+  // `cancel` potentially being assigned
+  // to the native rAF function
+  if(!isNative) {
+    return raf.call(global, fn)
+  }
+  return raf.call(global, function() {
+    try{
+      fn.apply(this, arguments)
+    } catch(e) {
+      setTimeout(function() { throw e }, 0)
+    }
+  })
+}
+module.exports.cancel = function() {
+  caf.apply(global, arguments)
+}
+
+},{"performance-now":6}],6:[function(require,module,exports){
+(function (process){
+// Generated by CoffeeScript 1.6.3
+(function() {
+  var getNanoSeconds, hrtime, loadTime;
+
+  if ((typeof performance !== "undefined" && performance !== null) && performance.now) {
+    module.exports = function() {
+      return performance.now();
+    };
+  } else if ((typeof process !== "undefined" && process !== null) && process.hrtime) {
+    module.exports = function() {
+      return (getNanoSeconds() - loadTime) / 1e6;
+    };
+    hrtime = process.hrtime;
+    getNanoSeconds = function() {
+      var hr;
+      hr = hrtime();
+      return hr[0] * 1e9 + hr[1];
+    };
+    loadTime = getNanoSeconds();
+  } else if (Date.now) {
+    module.exports = function() {
+      return Date.now() - loadTime;
+    };
+    loadTime = Date.now();
+  } else {
+    module.exports = function() {
+      return new Date().getTime() - loadTime;
+    };
+    loadTime = new Date().getTime();
+  }
+
+}).call(this);
+
+/*
+//@ sourceMappingURL=performance-now.map
+*/
+
+}).call(this,require('_process'))
+},{"_process":1}],7:[function(require,module,exports){
+"use strict";
+
+var _interopRequire = function (obj) {
+  return obj && (obj["default"] || obj);
+};
+
+var raf = require('raf');
+
+var domready = require('domready');
+
+var js = require('loads-js');
+
+var css = require('loads-css');
+
+var preload = _interopRequire(require('preload'));
+
+
+
+
+domready(function () {
+  var started = false, start = new Date();
+
+  preload.before();
+
+  function tick() {
+    var now = new Date() - start;
+
+    if (!started && now > 2000) {
+      started = true;
+      js("index.js", function () {
+        return css("index.css", preload.complete);
+      });
+    } else {
+      preload.draw();
+      raf(tick);
+    }
+  }
+
+  raf(tick);
+});
+},{"domready":2,"loads-css":3,"loads-js":4,"preload":8,"raf":5}],8:[function(require,module,exports){
+module.exports = {
+  
+  before: function() {
+    console.log('[index-html] before')
+  },
+  
+  draw: function() {
+    console.log('[index-html] draw')
+  },
+
+  complete: function() {
+    console.log('[index-html] complete')
+  }
+}
+
+},{}]},{},[7]);
+</script>
+</body>
+</html>

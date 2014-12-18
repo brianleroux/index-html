@@ -1,0 +1,49 @@
+{
+  "name": "index-html",
+  "version": "1.0.0",
+  "description": "14kb asset preloader library",
+  "main": "dist/compile.js",
+  "scripts": {
+    "clean": "rimraf dist/*",
+    "js": "6to5 --modules commonInterop src/compile.js > dist/compile.js",
+    "html": "node bin/index-html example > example/index.html",
+    "compile":"npm run clean && npm run js && npm run html",
+    "serve": "npm run compile && http-server -p 6666 example/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/brianleroux/index-html"
+  },
+  "keywords": [
+    "browser",
+    "preloader",
+    "browserify"
+  ],
+  "author": "Brian LeRoux <b@brian.io>",
+  "license": "Apache2",
+  "bugs": {
+    "url": "https://github.com/brianleroux/index-html/issues"
+  },
+  "homepage": "https://github.com/brianleroux/index-html",
+  "devDependencies": {
+    "6to5": "^1.15.0",
+    "6to5ify": "^2.0.0",
+    "browserify": "^7.0.1",
+    "domready": "^1.0.7",
+    "html-minify": "^0.3.1",
+    "htmlmin": "0.0.2",
+    "http-server": "^0.7.4",
+    "jquery": "^2.1.1",
+    "lazyloader": "^2.0.3",
+    "loads-css": "^1.0.0",
+    "loads-js": "^1.0.0",
+    "lodash.template": "^2.4.1",
+    "ls": "^0.1.0",
+    "micromark": "^1.0.0",
+    "raf": "^2.0.4",
+    "rimraf": "^2.2.8",
+    "tap-spec": "^2.1.1",
+    "tape": "^3.0.3",
+    "xhr": "^2.0.0"
+  }
+}

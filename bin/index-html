@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+var compile = require('../')
+
+compile(process.argv[0] || process.cwd(), function(err, html) {
+  if (err) {
+    process.stderr.write(err)
+  }
+  else {
+    process.stdout.write(html)
+  }
+})
