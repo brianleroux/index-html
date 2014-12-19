@@ -16,7 +16,7 @@ domready(function () {
   function tick() {
     let now = new Date - start
 
-    if (!started && now > 2000) {
+    if (!started && now > 1000) {
       started = true
       js('index.js', ()=> css('index.css', preload.complete))
     }
