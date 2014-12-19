@@ -2,7 +2,7 @@
 
 compile an optimal `index.html` preloader for a directory of assets
 
-### Assumptions
+### this is based on some assumptions
 
 - Best practice: inline critical path assets for fastest initial load experience capped at 14kb
 - Load all other assets dynamically after that

@@ -3,6 +3,9 @@
   "version": "1.0.1",
   "description": "14kb asset preloader library",
   "main": "dist/compile.js",
+  "bin":{
+    "index-html":"./bin/index-html"
+  },
   "scripts": {
     "clean": "rimraf dist/*",
     "js": "6to5 --modules commonInterop src/compile.js > dist/compile.js",
