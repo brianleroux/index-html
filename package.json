@@ -1,6 +1,6 @@
 {
   "name": "index-html",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "14kb asset preloader library",
   "main": "dist/compile.js",
   "bin": {
