@@ -28,25 +28,20 @@
     "url": "https://github.com/brianleroux/index-html/issues"
   },
   "homepage": "https://github.com/brianleroux/index-html",
-  "devDependencies": {
+  "dependencies": {
     "6to5": "^1.15.0",
     "6to5ify": "^2.0.0",
     "browserify": "^7.0.1",
     "domready": "^1.0.7",
-    "html-minify": "^0.3.1",
     "htmlmin": "0.0.2",
     "http-server": "^0.7.4",
-    "jquery": "^2.1.1",
-    "lazyloader": "^2.0.3",
     "loads-css": "^1.0.0",
     "loads-js": "^1.0.0",
     "lodash.template": "^2.4.1",
     "ls": "^0.1.0",
-    "micromark": "^1.0.0",
     "raf": "^2.0.4",
     "rimraf": "^2.2.8",
     "tap-spec": "^2.1.1",
-    "tape": "^3.0.3",
-    "xhr": "^2.0.0"
+    "tape": "^3.0.3"
   }
 }
